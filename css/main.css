@@ -1,0 +1,60 @@
+body {
+  background-image: url("./img/ws.jpg");
+  background-size: 100%;
+}
+
+.transbox {
+  background-color: rgba(0,0,0,0.6);
+  background-size: 100%;
+  border: 1px solid black;
+  margin: 60px;
+}
+
+.text {
+  color: white;
+}
+
+nav ul, footer ul {
+  font-family:'Helvetica', 'Arial', 'Sans-Serif';
+  padding: 0px;
+  list-style: none;
+  font-weight: bold;
+}
+
+nav ul li, footer ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 3em;
+  font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+
+p {
+  font-size: 1.5em;
+  line-height: 1.4em;
+}
+
+footer {
+  border-top: 1px solid #938181;
+  font-size: .8em;
+}
+
+ul.posts { 
+  margin: 20px auto 40px; 
+  font-size: 1.5em;
+}
+
+ul.posts li {
+  list-style: none;
+}
