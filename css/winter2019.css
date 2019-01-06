@@ -1,3 +1,49 @@
 html {
-  background-image: url("/img/winter2019.png");
+  background-image: url("/img/winter2019.jpg");
+}
+
+#div-menu-left {
+  height: 100%;
+  width: 120px;
+  border-right: 1px solid grey;
+  font-size: .8em;
+  display: inline-block;
+}
+
+#div-menu-left ul li {
+  padding: 10px;
+}
+
+#li-181224-niigata:hover {
+  
+}
+
+#div-menu-left ul li:hover {
+  background-color: grey;
+  cursor: pointer;
+}
+
+#filler {
+  height: 65px;
+  width: 120px;
+  display: inline-block;
+}
+
+#div-content-right {
+  position: absolute;
+  left: 120px;
+  top: 0;
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+
+  /* When background image changes, this helps */
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: 100% 100% cover;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  height: 100%;
 }

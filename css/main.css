@@ -1,66 +1,113 @@
+/* Reset defaults */
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
 html {
   background-position: center center;
   background-attachment: fixed;
-  background-size: 100% 100%;
+  background-size: 100% 100% cover;
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover;
+  height: 100%;
+}
+
+body {
+  height: 100%;
 }
 
 .transbox {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   background-color: rgba(0,0,0,0.6);
   background-size: 100%;
   border: 1px solid black;
-  margin: 60px;
-}
-
-.text {
+  height: 100%;
   color: white;
 }
 
+#nav-header {
+  height: 40px;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  font-size: .8em;
+  flex: none;
+  background-color: #343030;
+}
+
+#div-container {
+  position: relative; /* For content to cover container absolute */
+  /* For header and footer */
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  flex: auto;
+  z-index: 1;
+}
+
+#menu-header {
+  position: relative;
+  z-index: 99;
+}
+
+#ul-travel-list {
+  display: none;
+}
+
+#travel-list:hover #ul-travel-list {
+  display: table;
+  background-color: #343030;
+}
+
+#ul-travel-list li {
+  display: table-row;
+}
+
 nav ul, footer ul {
+  height: 40px;
   font-family:'Helvetica', 'Arial', 'Sans-Serif';
-  padding: 0px;
   list-style: none;
   font-weight: bold;
 }
 
 nav ul li, footer ul li {
-  display: inline;
-  margin-right: 20px;
+  display: inline-block;
+  height: 40px;
+  position: relative;
+}
+
+nav ul li:hover, footer ul li:hover {
+  background-color: grey;
 }
 
 a {
   color: white;
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-h1 {
-  font-size: 3em;
-  font-family:'Helvetica', 'Arial', 'Sans-Serif';
-}
-
-p {
-  font-size: 1.5em;
-  line-height: 1.4em;
+  padding: 13px;
+  display: inline-block;
 }
 
 footer {
-  border-top: 1px solid #938181;
+  background-color: #343030;
+  bottom: 0;
+  height: 40px;
+  width: 100%;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
   font-size: .8em;
+  flex: none;
 }
 
-ul.posts { 
-  margin: 20px auto 40px; 
-  font-size: 1.5em;
+#content-info {
+  display: inline-block;
+  padding: 10px;
 }
 
-ul.posts li {
-  list-style: none;
+#showcase {
+  color: burlywood;
+  font-weight: bold;
 }

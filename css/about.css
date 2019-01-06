@@ -1,0 +1,17 @@
+#content-info {
+  display: none;
+}
+
+#text-content > p {
+  padding: 10px;
+}
+
+.site-info {
+  padding: 10px;
+}
+
+.site-info a {
+  padding: 0px;
+  color: bisque;
+  cursor: pointer;
+}

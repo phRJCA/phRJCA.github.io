@@ -3,27 +3,38 @@
   <head>
   <title>{{page.title}}</title>
   <!-- link to main stylesheet -->
-  <link rel="stylesheet" type="text/css" href="/css/{{page.background}}">
   <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <link rel="stylesheet" type="text/css" href="/css/{{page.background}}">
+
+  <script type="text/javascript" src="/js/main.js"></script>
   </head>
   <body>
   <div class="transbox">
-    <div class="text">
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-        </ul>
-      </nav>
-      <div class="container">
-        {{content}}
-      </div>
-      <footer>
-        <ul>
-          <li><a href="/travels/winter2019">Winter Nomad</a></li>
-          <li><a href="https://github.com/phRJCA">Github</a></li>
-        </ul>
-      </footer>
+    <nav id="nav-header">
+      <ul id="menu-header">
+        <li><a href="/">Home</a></li>
+        <li id='travel-list'><a>Travels &#9662;</a>
+          <ul id='ul-travel-list'>
+            <li><a href="/travels/winter2019">Winter Nomad</a></li>
+            <li><a>Coming Soon...</a></li>
+          </ul>
+        </li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+    <div id="div-container">
+      {{content}}
+        <div id='content-info'>
+          <p id='showcase'>Latest Update: Winter Nomad: Travel Map is up!</p>
+          <p>More content coming up soon! (Maybe in a day, most likely within a week, definitely within the month from date last updated)</p>
+          <p>Last updated: January 6, 2019</p>
+        </div>
     </div>
+    <footer>
+      <ul>
+        <li><a href="https://github.com/phRJCA">Github</a></li>
+      </ul>
+    </footer>
   </div>
   </body>
 </html>
