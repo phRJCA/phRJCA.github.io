@@ -1,5 +1,5 @@
-function showTravelMap() {
-  document.getElementById('div-content-right').style.backgroundImage = "url('/img/winter2019full.png')";
+function showImage(imgPath) {
+  document.getElementById('div-content-right').style.backgroundImage = "url(" + imgPath + ")";
   document.getElementById('div-content-right').style.color = "black";
 };
 
