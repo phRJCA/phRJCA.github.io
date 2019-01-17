@@ -8,10 +8,12 @@ html {
   border-right: 1px solid grey;
   font-size: .8em;
   display: inline-block;
+  overflow-y: scroll;
 }
 
 #div-menu-left ul li {
   padding: 10px;
+  padding-bottom: 0px;
 }
 
 #div-menu-left ul li:hover {
