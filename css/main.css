@@ -41,6 +41,7 @@ body {
 }
 
 #div-container {
+  height: 100%;
   position: relative; /* For content to cover container absolute */
   /* For header and footer */
   overflow-y: scroll;
