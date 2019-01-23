@@ -13,7 +13,6 @@ html {
 
 #div-menu-left ul li {
   padding: 10px;
-  padding-bottom: 0px;
 }
 
 #div-menu-left ul li:hover {
@@ -38,10 +37,11 @@ html {
 
 #img-highlight {
   position: absolute;
-  left: 120px;
   top: 0;
+  margin-left: 5%;
   height: 100%;
   width: 100%;
+  cursor: pointer;
 
   /* When background image changes, this helps */
   background-position: center center;
@@ -50,4 +50,26 @@ html {
   -webkit-background-size: contain;
   -moz-background-size: contain;
   -o-background-size: contain;
+}
+
+#div-img-text {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: none; /* This will change whenever an image is clicked */
+  z-index: 99;
+  background-color: rgba(0,0,0,0.7);
+  color: white;
+  position: fixed;
+}
+
+#img-text {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  width: 75%;
+  margin: auto;
+  transform: translate(-50%, -50%);
 }
