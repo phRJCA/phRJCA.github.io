@@ -5,7 +5,7 @@ const travelMapText = "<p>On the first few days, I planned my travels to look fo
   "<br>" +
   "<p>始めから、旅行は雪を見るために計画した。</p>" +
   "<p>それで、そうしました。</p>" +
-  "<p>そして考えました：流れで任せたら、旅行はもっと楽しんだ。</p>" +
+  "<p>そして考えました：流れで任せたら、旅行はもっと楽しいんだ。</p>" +
   "<p>それで、そうしました。</p>";
 
 const niigataText = "<p>It was green. Mountains. Grasses. Then it was dark.</p>" +
