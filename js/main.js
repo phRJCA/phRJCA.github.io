@@ -130,6 +130,12 @@ let hoveredListOldColor = '';
 let isShown = '';
 
 function showImage(imgPath) {
+  // This runs only the first highlight
+  const imgContainer = document.getElementById('img-highlight');
+  if (!imgContainer.style.display) {
+    imgContainer.style.display = 'block';
+  };
+
   // Return old hovered list back to its original color
   if (hoveredList) {
     hoveredList.style['background-color'] = hoveredListOldColor;

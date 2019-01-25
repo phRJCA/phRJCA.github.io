@@ -56,6 +56,10 @@ body {
   z-index: 99;
 }
 
+#img-highlight {
+  display: none;
+}
+
 #ul-travel-list {
   display: none;
 }
@@ -89,7 +93,7 @@ nav ul li:hover, footer ul li:hover {
 a {
   color: white;
   text-decoration: none;
-  padding: 13px;
+  padding: 10px;
   display: inline-block;
 }
 
