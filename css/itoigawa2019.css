@@ -1,0 +1,38 @@
+html {
+  background-image: url("/img/itoigawa2019/itoigawa-bg.jpg");
+}
+
+.img-container {
+  display: inline-block;
+  vertical-align: middle;
+  height: 90%;
+  width: 50%;
+  color: white;
+}
+
+.img-container:before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  height: 115%;
+}
+
+.icon-container {
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.4);
+}
+
+#prev-img-con {
+  text-align: left;
+}
+
+#next-img-con {
+  text-align: right;
+}
+
+#img-counter {
+  color: white;
+  background-color: rgba(0,0,0,0.4);
+  text-align: center;
+  padding: 10px;
+}
