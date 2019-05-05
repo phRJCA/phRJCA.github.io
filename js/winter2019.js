@@ -21,7 +21,7 @@ const niigataText = "<p>It was green. Mountains. Grasses. Then it was dark.</p>"
 const tocIbaText = "<p>JAXA. Japan's counterpart to NASA.</p>" +
   "<p>Space has always been interesting for me.</p>" +
   "<p>And so, visiting JAXA made me see certain parts and procedures.</p>" +
-  "<p>I probably barely scratched the surface.</p>" +
+  "<p>I probably barely even scratched the surface.</p>" +
   "<br>" +
   "<p>JAXA。日本のNASA。</p>" +
   "<p>私にとって、宇宙にはずっと前から興味がある。</p>" +
