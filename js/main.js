@@ -2,7 +2,7 @@ let currentPicIdx = 0;
 
 let hoveredList = '';
 let hoveredListOldColor = '';
-let isShown = '';
+let isShown = false;
 
 document.onkeydown = checkKey;
 

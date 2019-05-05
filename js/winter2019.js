@@ -1,3 +1,6 @@
+const winter2019Guide = "<p>These lists are hoverable. You can click the images to read the relevant text.</p>" +
+  "<p>ルストはホバーできます。画像をクリックしたら、作品を読める。"
+
 const travelMapText = "<p>On the first few days, I planned my travels to look for some snow.</p>" +
   "<p>And so I did.</p>" +
   "<p>Then I thought: It might be more fun if I stopped planning and go with the flow.</p>" +
@@ -110,6 +113,7 @@ const aichiText = "<p>The last day.</p>" +
   "<p>終わりました。</p>";
 
 const travelList = {
+  'winter-2019-guide': winter2019Guide,
   'li-travel-map': travelMapText,
   'li-181224-niigata': niigataText,
   'li-181225-toc-iba': tocIbaText,
@@ -130,7 +134,7 @@ function showImageText() {
 
   const imgTextDiv = document.getElementById('div-img-text');
   if (isShown) {
-    isShown = '';
+    isShown = false;
     imgTextDiv.style.display = 'none';
   } else {
     isShown = true;
@@ -139,3 +143,20 @@ function showImageText() {
     imgText.innerHTML = hoveredListText;
   };
 };
+
+function showText(text) {
+  const hoveredListText = travelList[text];
+  const imgTextDiv = document.getElementById('div-img-text');
+
+  document.getElementById('img-highlight').style.display = 'block';
+
+  if (isShown) {
+    isShown = false;
+    imgTextDiv.style.display = 'none';
+  } else {
+    isShown = true;
+    imgTextDiv.style.display = 'block';
+    const imgText = document.getElementById('img-text');
+    imgText.innerHTML = hoveredListText;
+  };
+}
