@@ -1,0 +1,7 @@
+html {
+  background-image: url("/public/img/winter2019/winter2019.jpg");
+}
+
+#img-highlight {
+  cursor: pointer;
+}

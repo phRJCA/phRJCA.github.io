@@ -1,5 +1,5 @@
 html {
-  background-image: url("/img/itoigawa2019/itoigawa-bg.jpg");
+  background-image: url("/public/img/itoigawa2019/itoigawa-bg.jpg");
 }
 
 .img-container {
@@ -24,10 +24,12 @@ html {
 
 #prev-img-con {
   text-align: left;
+  float: left;
 }
 
 #next-img-con {
   text-align: right;
+  float: right;
 }
 
 #img-counter {
