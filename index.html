@@ -1,16 +1,164 @@
 ---
-layout: default
-title: RJCA
-background: home.css
+layout: null
+permalink: /
 ---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>RJCA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <nav class="lang-switch" aria-label="Language">
+        <a href="/?lang=en" data-lang="en">English</a>
+        <a href="/?lang=jp" data-lang="jp">日本語</a>
+        <a href="/?lang=kr" data-lang="kr">한국어</a>
+      </nav>
+    </header>
 
-<div id='content-info'>
-  <p class='showcase'>THIS SITE HAS BEEN DEPRECATED! I've improved. Go to this site instead: https://phrjca.herokuapp.com/. Keeping this for memories :)</p>
-  <p class='update-history'>- February 16, 2019: Winter Nomad: Itoigawa Yukikaki</p>
-  <p class='update-history'>- January 24, 2019: Winter Nomad: Clickable images. Travel insights</p>
-  <p class='update-history'>- January 17, 2019: Winter Nomad: Fixed images and added Japanese translations</p>
-  <p class='update-history'>- January 12, 2019: Winter Nomad: Travel highlight images for each location</p>
-  <p class='update-history'>- January 6, 2019: Winter Nomad: Travel map is up!</p>
-  <p>More content may be coming up soon! (Who knows when?)</p>
-  <p>Last updated: February 16, 2019</p>
-</div>
+    <main>
+      <section class="hero">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <span class="hero-badge" data-i18n="badge">Portfolio</span>
+            <p class="hero-name" data-i18n="heroName">Reynald Joshua Albano</p>
+            <h1 data-i18n="heroTitle">I build things on the web.</h1>
+            <p class="lead">
+              <span data-i18n="heroLeadMain">Multilingual software engineer</span>
+              <span class="lead-langs" data-i18n="heroLeadLangs">English, Japanese, and Korean.</span>
+            </p>
+          </div>
+          <aside class="hero-photo-aside" aria-label="Profile">
+            <figure class="hero-photo-frame">
+              <div
+                class="photo-speech-bubble"
+                id="photo-speech"
+                role="status"
+                aria-live="polite"
+                aria-hidden="true"
+              >
+                <span id="photo-speech-text"></span>
+              </div>
+              <img
+                class="hero-photo-img"
+                src="/assets/images/profile.jpeg"
+                alt="Portrait of Reynald Joshua Albano"
+                width="720"
+                height="960"
+                decoding="async"
+                fetchpriority="high"
+                data-i18n-alt="heroAlt"
+                data-i18n-aria-label="photoImgAria"
+                aria-label="Profile photo — click for a surprise"
+                role="button"
+                tabindex="0"
+              />
+            </figure>
+          </aside>
+        </div>
+      </section>
+
+      <div class="section-panel">
+        <div class="grid-highlights">
+          <article class="card">
+            <h2><span class="icon-dot" aria-hidden="true"></span><span data-i18n="codeTitle">I code</span></h2>
+            <p data-i18n="codeBody">Built and shipped this site in a day.</p>
+          </article>
+          <article class="card">
+            <h2><span class="icon-dot" aria-hidden="true"></span><span data-i18n="learnTitle">I learn fast</span></h2>
+            <p data-i18n="learnBody">I pick up new tools quickly and put them to work.</p>
+          </article>
+          <article class="card">
+            <h2><span class="icon-dot" aria-hidden="true"></span><span data-i18n="aiTitle">I adapt</span></h2>
+            <p data-i18n="aiBody">I stay updated with AI and modern technologies.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="section-panel skills-panel">
+        <p class="section-title" data-i18n="sectionSkills">Programming skills</p>
+        <div class="lang-grid">
+          <div class="lang-card">
+            <div class="name" data-i18n="skillJs">JavaScript</div>
+          </div>
+          <div class="lang-card">
+            <div class="name" data-i18n="skillMongo">MongoDB</div>
+          </div>
+          <div class="lang-card">
+            <div class="name" data-i18n="skillAi">AI Tools</div>
+          </div>
+        </div>
+        <p class="skills-more" data-i18n="skillsMore">…and more.</p>
+      </div>
+
+      <div class="section-panel">
+        <p class="section-title" data-i18n="sectionLang">Languages</p>
+        <div class="lang-grid">
+          <div class="lang-card">
+            <div class="label" data-i18n="langEnLabel">English</div>
+            <div class="name" data-i18n="langEnName">English</div>
+            <div class="score" data-i18n="langEnScore">TOEIC L&amp;R — 990</div>
+          </div>
+          <div class="lang-card">
+            <div class="label" data-i18n="langJpLabel">Japanese</div>
+            <div class="name" data-i18n="langJpName">日本語</div>
+            <div class="score" data-i18n="langJpScore">JLPT — N1</div>
+          </div>
+          <div class="lang-card">
+            <div class="label" data-i18n="langKrLabel">Korean</div>
+            <div class="name" data-i18n="langKrName">한국어</div>
+            <div class="score" data-i18n="langKrScore">TOPIK — Level 5</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-panel">
+        <p class="section-title" data-i18n="sectionAcademic">Academic Background</p>
+        <h3 class="acad-sub" data-i18n="acadGradTitle">Graduated</h3>
+        <ul class="acad-list">
+          <li>
+            <a class="acad-link" href="https://www.dlsu.edu.ph/" target="_blank" rel="noopener noreferrer"><img class="acad-logo" src="/assets/schools/dlsu.ico" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="acadGrad1School">De La Salle University Manila</span></a><span data-i18n="acadGrad1Rest"> — Bachelor Of Science In Accountancy</span>
+          </li>
+          <li>
+            <a class="acad-link" href="https://www.fflc.ac.jp/" target="_blank" rel="noopener noreferrer"><img class="acad-logo" src="/assets/schools/fflc.png" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="acadGrad2School">Fukuoka Foreign Language College</span></a><span data-i18n="acadGrad2Rest"> — Japanese Language Program (1-year)</span>
+          </li>
+        </ul>
+        <h3 class="acad-sub" data-i18n="acadCurrentTitle">Current</h3>
+        <p class="acad-dual" data-i18n="acadDual">Dual Degree Program (2+2)</p>
+        <ul class="acad-list">
+          <li>
+            <a class="acad-link" href="https://www.nagasaki-gaigo.ac.jp/" target="_blank" rel="noopener noreferrer"><img class="acad-logo" src="/assets/schools/nagasaki.ico" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="acadCur1School">Nagasaki University Of Foreign Studies</span></a><span data-i18n="acadCur1Rest"> — International Communication Major (1st and 2nd year)</span>
+          </li>
+          <li>
+            <a class="acad-link" href="https://www.bufs.ac.kr/" target="_blank" rel="noopener noreferrer"><img class="acad-logo" src="/assets/schools/bufs.png" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="acadCur2School">Busan University Of Foreign Studies</span></a><span data-i18n="acadCur2Rest"> — International Studies, Diplomacy Major (3rd year, current)</span>
+          </li>
+        </ul>
+        <h3 class="acad-sub" data-i18n="acadOthersTitle">Others</h3>
+        <h3 class="acad-sub" data-i18n="othersChinaTitle">China</h3>
+        <ul class="acad-list">
+          <li>
+            <a class="acad-link" href="https://english.neusoft.edu.cn/" target="_blank" rel="noopener noreferrer" data-i18n-href="othersNeusoftUrl"><img class="acad-logo" src="/assets/schools/neusoft.ico" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="othersChina1School">Dalian Neusoft University Of Information</span></a><span data-i18n="othersChina1Rest"> — Chinese Short-Term Study Program (2 weeks)</span>
+          </li>
+        </ul>
+        <h3 class="acad-sub" data-i18n="othersRussiaTitle">Russia</h3>
+        <ul class="acad-list">
+          <li>
+            <a class="acad-link" href="https://english.spbu.ru/" target="_blank" rel="noopener noreferrer"><img class="acad-logo" src="/assets/schools/spbu.png" alt="" width="16" height="16" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="othersRussia1School">St. Petersburg State University</span></a><span data-i18n="othersRussia1Rest"> — Russian Language Program (3 months)</span>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

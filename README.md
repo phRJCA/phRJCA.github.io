@@ -1,10 +1,4 @@
-DEPRECATED! Look at this newer, fancier site instead: https://phrjca.herokuapp.com/
-
-Not vanillaJS, but ¯\_(ツ)_/¯
+This site was initially made for me to practice programming. Now it's here for me to show anything I would like to show. Enjoy!
 
 ---
-This site was made as a way for me to practice vanillaJS, the most lightweight framework available anywhere, as much as possible  (except for Jekyll, for Github pages).
-To add VanillaJS to your library, just add this piece of code:
-```
-```
-For more info, visit this site: http://vanilla-js.com/
+The live site is back! Legacy pages from ~2020 live under `/old-2020` for memories.

@@ -97,6 +97,19 @@ a {
   display: inline-block;
 }
 
+a.real-home-btn {
+  margin: 5px 6px 5px 8px;
+  padding: 6px 12px;
+  line-height: 1.2;
+  background-color: #2a2a2a;
+  border: 1px solid #77ffba;
+  border-radius: 4px;
+}
+
+a.real-home-btn:hover {
+  background-color: #3d3d3d;
+}
+
 footer {
   background-color: #343030;
   bottom: 0;

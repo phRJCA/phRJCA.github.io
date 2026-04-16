@@ -1,4 +1,4 @@
-const imgPath = "/public/img";
+const imgPath = "/old-2020/public/img";
 const itoigawa2019Path = "/itoigawa2019";
 
 // Pic Urls
