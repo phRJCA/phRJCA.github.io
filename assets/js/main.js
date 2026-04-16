@@ -186,7 +186,8 @@
   let photoBubbleHideTimer = null;
   let currentPhotoBubbleKey = null;
 
-  const PHOTO_MILESTONES = [5, 10, 15, 20, 25];
+  /* First bubble on click 1, then every 5 clicks: 6, 11, 16, 21 */
+  const PHOTO_MILESTONES = [1, 6, 11, 16, 21];
   const PHOTO_KEYS = [
     "photoBubble5",
     "photoBubble10",
@@ -194,6 +195,12 @@
     "photoBubble20",
     "photoBubble25"
   ];
+
+  const PHOTO_MOBILE_MAX = window.matchMedia("(max-width: 899.98px)");
+
+  function isPhotoMobileLayout() {
+    return PHOTO_MOBILE_MAX.matches;
+  }
 
   function getLang() {
     const q = new URLSearchParams(window.location.search).get("lang");
@@ -242,7 +249,10 @@
 
   function onPhotoInteract() {
     photoClicks += 1;
-    if (photoClicks % 5 === 0) {
+    if (isPhotoMobileLayout()) {
+      triggerPhotoWiggle();
+    } else if ((photoClicks - 1) % 5 === 0) {
+      /* Desktop: first wiggle on click 1, then every 5 clicks (6, 11, 16, …) */
       triggerPhotoWiggle();
     }
     const idx = PHOTO_MILESTONES.indexOf(photoClicks);
@@ -250,7 +260,7 @@
       showPhotoBubble(PHOTO_KEYS[idx]);
       return;
     }
-    if (photoClicks > 25 && photoClicks % 5 === 0) {
+    if (photoClicks > 21 && (photoClicks - 21) % 5 === 0) {
       showPhotoBubble("photoBubbleMore");
     }
   }
