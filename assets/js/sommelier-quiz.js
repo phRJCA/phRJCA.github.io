@@ -82,6 +82,7 @@
     queue: [],
     index: 0,
     selected: null,
+    answers: [],
     score: 0,
     finished: false
   };
@@ -722,6 +723,7 @@
       state.queue = shuffle(questionsFor(part));
       state.index = 0;
       state.selected = null;
+      state.answers = [];
       state.score = 0;
       state.finished = false;
     }
@@ -897,44 +899,73 @@
     }
     const next = e.target.closest("[data-action=next]");
     if (next && state.selected !== null) {
-      if (state.index >= state.queue.length - 1) {
-        state.finished = true;
-      } else {
-        state.index += 1;
-        state.selected = null;
-      }
-      render();
+      goNext();
       return;
     }
     const choice = e.target.closest("[data-choice]");
     if (!choice || state.selected !== null || state.finished) return;
     const i = Number(choice.getAttribute("data-choice"));
     if (Number.isNaN(i)) return;
-    state.selected = i;
-    if (state.queue[state.index] && i === state.queue[state.index].a) state.score += 1;
+    rememberAnswer(i);
     render();
     revealFeedback();
   });
 
+  function rememberAnswer(choice) {
+    state.selected = choice;
+    state.answers[state.index] = choice;
+    if (state.queue[state.index] && choice === state.queue[state.index].a) state.score += 1;
+  }
+
+  function restoreAnswer() {
+    const saved = state.answers[state.index];
+    state.selected = saved === undefined ? null : saved;
+  }
+
+  function goNext() {
+    if (state.selected === null) return;
+    if (state.index >= state.queue.length - 1) {
+      state.finished = true;
+    } else {
+      state.index += 1;
+      restoreAnswer();
+    }
+    render();
+  }
+
+  function goPrev() {
+    if (state.index === 0) return;
+    state.index -= 1;
+    restoreAnswer();
+    render();
+    if (state.selected !== null) revealFeedback();
+  }
+
   document.addEventListener("keydown", function (e) {
     if (state.finished || !state.queue.length || parseRoute().mode !== "quiz") return;
     if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+    if (e.key === "ArrowLeft") {
+      if (state.index === 0) return;
+      e.preventDefault();
+      goPrev();
+      return;
+    }
     if (state.selected === null) {
       const map = { a: 0, b: 1, c: 2, d: 3, "1": 0, "2": 1, "3": 2, "4": 3 };
       const key = e.key.toLowerCase();
       if (map[key] !== undefined) {
-        state.selected = map[key];
-        if (state.queue[state.index].a === state.selected) state.score += 1;
+        rememberAnswer(map[key]);
         render();
         revealFeedback();
       }
-    } else if (e.key === "Enter") {
-      if (state.index >= state.queue.length - 1) state.finished = true;
-      else {
-        state.index += 1;
-        state.selected = null;
-      }
-      render();
+      return;
+    }
+    if (e.key === "Enter" || e.key === "ArrowRight") {
+      e.preventDefault();
+      goNext();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      goPrev();
     }
   });
 

@@ -350,6 +350,11 @@ body.apps-docked .apps-root {
     margin-left: 280px;
     margin-right: auto;
   }
+
+  body.page-app.apps-docked .wrap {
+    width: calc(100% - 280px);
+    margin-right: 0;
+  }
 }
 
 @media (max-width: 899.98px) {

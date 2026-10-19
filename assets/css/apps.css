@@ -18,6 +18,13 @@
   font-size: 1.05rem;
 }
 
+@media (min-width: 800px) {
+  .page-app #sommelier-app {
+    width: min(42rem, 100%);
+    margin-inline: auto;
+  }
+}
+
 .app-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -385,8 +392,7 @@
 .quiz-photos a {
   display: flex;
   flex-direction: column;
-  flex: 1 1 100%;
-  width: 100%;
+  width: fit-content;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -395,6 +401,12 @@
   background: rgba(0, 0, 0, 0.28);
   text-decoration: none;
   color: var(--muted);
+}
+
+@media (min-width: 800px) {
+  .quiz-photos a {
+    max-width: min(36rem, 100%);
+  }
 }
 
 .quiz-photos img {
