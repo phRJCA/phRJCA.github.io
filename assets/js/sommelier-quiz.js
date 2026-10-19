@@ -969,6 +969,35 @@
     }
   });
 
+  function sameAppLink(anchor) {
+    if (!anchor || anchor.target === "_blank" || !anchor.href) return false;
+    const url = new URL(anchor.href, window.location.href);
+    return url.origin === window.location.origin && url.pathname === window.location.pathname;
+  }
+
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const anchor = e.target.closest("a");
+    if (!sameAppLink(anchor)) return;
+    const url = new URL(anchor.href, window.location.href);
+    const next = url.pathname + url.search;
+    if (next === window.location.pathname + window.location.search) return;
+    e.preventDefault();
+    history.pushState(null, "", next);
+    const route = parseRoute();
+    if (route.part !== state.part) {
+      state.queue = [];
+      state.finished = false;
+    }
+    render();
+  });
+
+  window.addEventListener("popstate", function () {
+    state.queue = [];
+    state.finished = false;
+    render();
+  });
+
   window.addEventListener("rjca:langchange", render);
   render();
 })();

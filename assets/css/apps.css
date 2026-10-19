@@ -1,5 +1,8 @@
 .page-app .wrap {
   padding-bottom: 2.5rem;
+}
+
+.page-app #app-root {
   overflow-x: clip;
 }
 
