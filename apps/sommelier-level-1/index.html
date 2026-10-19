@@ -1,0 +1,47 @@
+---
+layout: null
+permalink: /apps/sommelier-level-1/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Sommelier Certification Level 1 · RJCA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/apps.css">
+</head>
+<body class="page-app">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    {% include site-nav.html %}
+
+    <main id="sommelier-app">
+      <p class="hero-badge" data-i18n="appBadge">Apps</p>
+      <h1 id="app-title" data-i18n="navSommelier">Sommelier Certification Level 1</h1>
+      <p class="lead app-lead" id="app-lead" data-i18n="appLead">Practice the written exam in shuffled quiz cards, or review explanations by section.</p>
+
+      <div id="app-root"></div>
+    </main>
+
+    <footer class="app-ref">
+      <p>
+        <span data-i18n="appRefLabel">Reference</span>
+        ·
+        <a href="http://koreafnb.or.kr/" target="_blank" rel="noopener noreferrer">http://koreafnb.or.kr/</a>
+      </p>
+      <p class="app-ref-org" data-i18n="appRefOrg">Korea Food &amp; Beverage Education Association</p>
+    </footer>
+  </div>
+
+  <script src="/assets/js/sommelier-data.js" defer></script>
+  <script src="/assets/js/sommelier-i18n.js" defer></script>
+  <script src="/assets/js/sommelier-choices.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/sommelier-quiz.js" defer></script>
+</body>
+</html>

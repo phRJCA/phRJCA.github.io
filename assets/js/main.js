@@ -58,7 +58,23 @@
     photoImgAria: "Profile photo — click for a surprise",
     htmlLang: "en",
     title: "Reynald Joshua Albano · Portfolio",
-    bodyClass: "lang-en"
+    bodyClass: "lang-en",
+    navApps: "Apps",
+    navHome: "Home",
+    navSommelier: "Sommelier Certification Level 1",
+    navQuizAll: "Quiz All",
+    navPartSelection: "(1) Wine Selection & Purchase",
+    navPartCellar: "(2) Wine Cellar Management",
+    navPartRecommend: "(3) Wine Recommendation & Sales",
+    navPartService: "(4) Wine Service",
+    navPartTasting: "(5) Wine Tasting",
+    navPartClassification: "(6) Wine Classification",
+    navPartManagement: "(7) Wine Business Management",
+    appBadge: "Apps",
+    appLead: "Practice the written exam in shuffled quiz cards, or review explanations by section.",
+    appRefLabel: "Reference",
+    appRefOrg: "Korea Food & Beverage Education Association",
+    appTitle: "Sommelier Certification Level 1 · RJCA"
     },
     jp: {
     badge: "ポートフォリオ",
@@ -117,7 +133,23 @@
     photoImgAria: "プロフィール写真 — クリックでひとこと",
     htmlLang: "ja",
     title: "アルバノ レイナルド・ジョシュア｜ポートフォリオ",
-    bodyClass: "lang-jp"
+    bodyClass: "lang-jp",
+    navApps: "Apps",
+    navHome: "ホーム",
+    navSommelier: "ソムリエ1級",
+    navQuizAll: "全問クイズ",
+    navPartSelection: "(1) ワイン選定・購入",
+    navPartCellar: "(2) ワインセラー管理",
+    navPartRecommend: "(3) ワイン推薦・販売",
+    navPartService: "(4) ワインサービス",
+    navPartTasting: "(5) ワインテイスティング",
+    navPartClassification: "(6) ワイン分類",
+    navPartManagement: "(7) 営業場の経営",
+    appBadge: "Apps",
+    appLead: "問題順をシャッフルしたクイズか、分野ごとの解説で筆記試験を復習できます。",
+    appRefLabel: "参考",
+    appRefOrg: "韓国飲食料教育協会",
+    appTitle: "ソムリエ1級 · RJCA"
     },
     kr: {
     badge: "포트폴리오",
@@ -176,7 +208,23 @@
     photoImgAria: "프로필 사진 — 클릭하면 메시지가 나와요",
     htmlLang: "ko",
     title: "알바노 레이날드 죠슈아 · 포트폴리오",
-    bodyClass: "lang-kr"
+    bodyClass: "lang-kr",
+    navApps: "Apps",
+    navHome: "홈",
+    navSommelier: "소믈리에 1급",
+    navQuizAll: "전체 퀴즈",
+    navPartSelection: "(1) 와인선정 · 구매",
+    navPartCellar: "(2) 와인셀러관리",
+    navPartRecommend: "(3) 와인 추천판매",
+    navPartService: "(4) 와인 서비스",
+    navPartTasting: "(5) 와인 테이스팅",
+    navPartClassification: "(6) 와인 분류",
+    navPartManagement: "(7) 와인 영업장 경영",
+    appBadge: "Apps",
+    appLead: "문제는 섞고 보기는 그대로 둔 카드 퀴즈와, 분야별 해설로 필기시험을 복습할 수 있습니다.",
+    appRefLabel: "참고",
+    appRefOrg: "사단법인 한국식음료교육협회",
+    appTitle: "소믈리에 1급 · RJCA"
     }
   };
 
@@ -270,8 +318,11 @@
     if (!pack) return;
 
     document.documentElement.lang = pack.htmlLang;
-    document.title = pack.title;
-    document.body.className = pack.bodyClass;
+    document.title = document.body.classList.contains("page-app")
+      ? pack.appTitle
+      : pack.title;
+    document.body.classList.remove("lang-en", "lang-jp", "lang-kr");
+    document.body.classList.add(pack.bodyClass);
 
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
@@ -295,10 +346,115 @@
 
     document.querySelectorAll(".lang-switch a").forEach((a) => {
       const l = a.getAttribute("data-lang");
-      a.setAttribute("aria-current", l === lang ? "true" : "false");
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", l);
+      a.setAttribute("href", url.pathname + url.search);
+      if (l === lang) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".apps-nav a[href]").forEach((a) => {
+      const url = new URL(a.getAttribute("href"), window.location.origin);
+      url.searchParams.set("lang", lang);
+      a.setAttribute("href", url.pathname + url.search);
+    });
+
+    const homeLink = document.querySelector(".apps-home-link");
+    const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
+    if (homeLink) {
+      if (currentPath === "/") homeLink.setAttribute("aria-current", "page");
+      else homeLink.removeAttribute("aria-current");
+    }
+    const currentPart = new URLSearchParams(window.location.search).get("part");
+    document.querySelectorAll(".apps-submenu a").forEach((a) => {
+      const url = new URL(a.getAttribute("href"), window.location.origin);
+      const linkPart = url.searchParams.get("part");
+      const onApp = currentPath.endsWith("/apps/sommelier-level-1");
+      if (onApp && currentPart && linkPart === currentPart) {
+        a.setAttribute("aria-current", "page");
+      } else {
+        a.removeAttribute("aria-current");
+      }
     });
 
     refreshPhotoBubbleIfVisible();
+  }
+
+  function setupAppsNav() {
+    const nav = document.querySelector(".apps-nav");
+    const btn = document.querySelector(".apps-root");
+    const parent = document.querySelector(".apps-item-parent");
+    const toggle = document.querySelector(".apps-parent-toggle");
+    if (!nav || !btn) return;
+
+    const STORE = "rjca-apps-dock";
+    const SUB = "rjca-apps-sub";
+    const desktopQuery = window.matchMedia("(min-width: 900px)");
+    const isDesktop = () => desktopQuery.matches;
+
+    const setSub = (open, remember) => {
+      if (!parent || !toggle) return;
+      parent.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      if (remember && isDesktop()) {
+        try { localStorage.setItem(SUB, open ? "1" : "0"); } catch (err) { /* ignore */ }
+      }
+    };
+
+    const setOpen = (open, remember) => {
+      nav.classList.toggle("is-open", open);
+      document.body.classList.toggle("apps-docked", open && isDesktop());
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (remember && isDesktop()) {
+        try { localStorage.setItem(STORE, open ? "1" : "0"); } catch (err) { /* ignore */ }
+      }
+      if (!open) setSub(false, false);
+    };
+
+    const onSommelier = () =>
+      window.location.pathname.replace(/\/$/, "").endsWith("/apps/sommelier-level-1");
+
+    if (isDesktop()) {
+      let docked = false;
+      try { docked = localStorage.getItem(STORE) === "1"; } catch (err) { docked = false; }
+      if (docked) {
+        setOpen(true, false);
+        let sub = onSommelier();
+        try { if (localStorage.getItem(SUB) === "1") sub = true; } catch (err) { /* ignore */ }
+        setSub(sub, false);
+      }
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !nav.classList.contains("is-open");
+      setOpen(open, true);
+      if (open && onSommelier()) setSub(true, true);
+    });
+
+    if (toggle) {
+      toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setSub(!parent.classList.contains("is-open"), true);
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      if (isDesktop()) return;
+      if (!nav.contains(e.target)) setOpen(false, false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setOpen(false, true);
+    });
+
+    desktopQuery.addEventListener("change", () => {
+      if (!nav.classList.contains("is-open")) {
+        document.body.classList.remove("apps-docked");
+        return;
+      }
+      document.body.classList.toggle("apps-docked", isDesktop());
+    });
   }
 
   const photoImg = document.querySelector(".hero-photo-img");
@@ -312,5 +468,29 @@
     });
   }
 
+  setupAppsNav();
+
+  document.querySelectorAll(".lang-switch a").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      const next = a.getAttribute("data-lang");
+      if (!next || !ALLOWED[next]) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", next);
+      history.replaceState({}, "", url.pathname + url.search);
+      applyLang(next);
+      window.dispatchEvent(new CustomEvent("rjca:langchange"));
+    });
+  });
+
   applyLang(getLang());
+
+  window.RJCA_I18N = {
+    STR: STR,
+    getLang: getLang,
+    t: function (key) {
+      const pack = STR[getLang()];
+      return (pack && pack[key]) || key;
+    }
+  };
 })();
