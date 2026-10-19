@@ -659,9 +659,6 @@
           link.appendChild(img);
           link.appendChild(cap);
           box.appendChild(link);
-          if (box.closest(".quiz-card") && box.childElementCount === 1) {
-            box.scrollIntoView({ block: "nearest", behavior: "smooth" });
-          }
         });
       });
     });
@@ -823,12 +820,13 @@
       '</p><div class="quiz-choices" role="group">' +
       choices +
       "</div>" +
-      feedback +
       '<div class="quiz-actions"><button type="button" class="quiz-btn primary" data-action="next"' +
       (answered ? "" : " disabled") +
       ">" +
       nextLabel +
-      "</button></div></section>";
+      "</button></div>" +
+      feedback +
+      "</section>";
     mountPhotos(root);
   }
 
@@ -871,8 +869,8 @@
   }
 
   function revealFeedback() {
-    const fb = root.querySelector(".quiz-feedback");
-    if (fb) fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    const next = root.querySelector("[data-action=next]");
+    if (next) next.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
   function render() {

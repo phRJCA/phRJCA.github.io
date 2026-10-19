@@ -1,5 +1,6 @@
 .page-app .wrap {
   padding-bottom: 2.5rem;
+  overflow-x: clip;
 }
 
 .page-app h1 {
@@ -144,8 +145,18 @@
   color: var(--muted);
 }
 
+.page-app .wrap,
+#app-root,
+.quiz-card,
+.explain-card,
+.hub-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .quiz-card {
   position: relative;
+  overflow: hidden;
   padding: 1.45rem 1.4rem 1.35rem;
   border-radius: var(--radius-panel);
   background: var(--panel-bg);
@@ -199,6 +210,7 @@
   font-weight: 600;
   line-height: 1.55;
   margin: 0 0 1.15rem;
+  overflow-wrap: anywhere;
 }
 
 .quiz-choices {
@@ -362,6 +374,8 @@
   align-items: flex-start;
   gap: 0.75rem;
   margin-top: 0.9rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .quiz-photos:empty {
@@ -371,7 +385,9 @@
 .quiz-photos a {
   display: flex;
   flex-direction: column;
-  width: max-content;
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   overflow: hidden;
   border-radius: 12px;
@@ -385,8 +401,8 @@
   display: block;
   width: auto;
   height: auto;
-  max-width: min(640px, 100%);
-  max-height: 360px;
+  max-width: 100%;
+  max-height: 320px;
   object-fit: contain;
   background: rgba(255, 255, 255, 0.04);
 }
