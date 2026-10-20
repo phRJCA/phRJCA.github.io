@@ -20,8 +20,9 @@
       finished: "Quiz complete",
       youScored: "You scored {score} / {total}.",
       items: "{n} questions",
-      allQuiz: "Quiz All",
+      allQuiz: "All",
       allLead: "Every written-exam question, shuffled. Choices stay in order.",
+      allLeadExplain: "Study every section. Use the part tabs to switch sections.",
       partLeadQuiz: "Questions are shuffled. Choose A–D to check the answer.",
       partLeadExplain: "Study the marked answers and a short explanation for each question.",
       sourceNo: "No. {n}",
@@ -42,8 +43,9 @@
       finished: "終了",
       youScored: "得点 {score} / {total}",
       items: "{n}問",
-      allQuiz: "全問クイズ",
+      allQuiz: "全問",
       allLead: "筆記の全問をシャッフルします。選択肢の順はそのままです。",
+      allLeadExplain: "全分野の解説です。上のタブで分野を切り替えます。",
       partLeadQuiz: "問題順だけ入れ替えます。A〜Dを選ぶと正誤が分かります。",
       partLeadExplain: "正解と短い解説を分野ごとに確認できます。",
       sourceNo: "第{n}問",
@@ -64,8 +66,9 @@
       finished: "완료",
       youScored: "{score} / {total}점",
       items: "{n}문",
-      allQuiz: "전체 퀴즈",
+      allQuiz: "전체",
       allLead: "필기 문제를 모두 섞습니다. 보기 순서는 그대로입니다.",
+      allLeadExplain: "전 분야의 해설입니다. 위 탭에서 분야를 바꿉니다.",
       partLeadQuiz: "문제만 섞입니다. A–D를 고르면 정오가 표시됩니다.",
       partLeadExplain: "표시된 정답과 짧은 해설을 분야별로 볼 수 있습니다.",
       sourceNo: "{n}번",
@@ -161,9 +164,16 @@
     const q = currentParams();
     const part = q.get("part");
     const mode = q.get("mode") === "quiz" ? "quiz" : "explain";
-    if (part === "all") return { part: "all", mode: "quiz" };
-    if (PART_IDS.indexOf(part) !== -1) return { part: part, mode: mode };
-    return { part: null, mode: "hub" };
+    const section = q.get("section");
+    if (part === "all") {
+      return {
+        part: "all",
+        mode: mode,
+        section: PART_IDS.indexOf(section) !== -1 ? section : PART_IDS[0]
+      };
+    }
+    if (PART_IDS.indexOf(part) !== -1) return { part: part, mode: mode, section: null };
+    return { part: null, mode: "hub", section: null };
   }
 
   function setHeader(route) {
@@ -178,7 +188,7 @@
     }
     if (route.part === "all") {
       title.textContent = t("allQuiz");
-      lead.textContent = t("allLead");
+      lead.textContent = route.mode === "explain" ? t("allLeadExplain") : t("allLead");
       return;
     }
     title.textContent = "(" + partIndex(route.part) + ") " + partLabel(route.part);
@@ -198,11 +208,13 @@
         t("backHub") +
         "</a>"
     );
-    if (route.part && route.part !== "all") {
+    if (route.part) {
+      const explainExtra =
+        route.part === "all" ? { part: "all", mode: "explain", section: route.section || PART_IDS[0] } : { part: route.part, mode: "explain" };
       bits.push('<div class="mode-tabs">');
       bits.push(
         '<a href="' +
-          appHref({ part: route.part, mode: "explain" }) +
+          appHref(explainExtra) +
           '"' +
           (route.mode === "explain" ? ' aria-current="true"' : "") +
           ">" +
@@ -221,6 +233,25 @@
       bits.push("</div>");
     }
     return '<div class="app-toolbar">' + bits.join("") + "</div>";
+  }
+
+  function allPartTabsHtml(route) {
+    if (route.part !== "all" || route.mode !== "explain") return "";
+    const tabs = PART_IDS.map(function (id, i) {
+      return (
+        '<a href="' +
+        appHref({ part: "all", mode: "explain", section: id }) +
+        '"' +
+        (route.section === id ? ' aria-current="true"' : "") +
+        ">" +
+        "(" +
+        (i + 1) +
+        ") " +
+        escapeHtml(partLabel(id)) +
+        "</a>"
+      );
+    }).join("");
+    return '<div class="part-tabs" role="tablist">' + tabs + "</div>";
   }
 
   function escapeHtml(s) {
@@ -682,15 +713,23 @@
 
   function renderHub() {
     const cards = [
-      '<a class="hub-card hub-all" href="' +
-        appHref({ part: "all" }) +
+      '<article class="hub-card hub-all"><a class="hub-card-link" href="' +
+        appHref({ part: "all", mode: "explain", section: PART_IDS[0] }) +
         '"><span class="hub-kicker">' +
         t("allQuiz") +
         '</span><span class="hub-title">' +
         siteT("navSommelier") +
         '</span><span class="hub-meta">' +
         t("items", { n: window.SOMMELIER_BANK.questions.length }) +
-        "</span></a>"
+        '</span></a><div class="quiz-actions"><a class="quiz-btn primary" href="' +
+        appHref({ part: "all", mode: "explain", section: PART_IDS[0] }) +
+        '">' +
+        t("openExplain") +
+        '</a><a class="quiz-btn" href="' +
+        appHref({ part: "all", mode: "quiz" }) +
+        '">' +
+        t("startQuiz") +
+        "</a></div></article>"
     ];
     window.SOMMELIER_BANK.parts.forEach(function (part, i) {
       const count = questionsFor(part.id).length;
@@ -833,7 +872,8 @@
   }
 
   function renderExplain(route) {
-    const list = questionsFor(route.part).slice().sort(function (a, b) {
+    const explainPart = route.part === "all" ? route.section : route.part;
+    const list = questionsFor(explainPart).slice().sort(function (a, b) {
       return a.n - b.n;
     });
     const cards = list
@@ -866,7 +906,13 @@
         );
       })
       .join("");
-    root.innerHTML = toolbarHtml(route) + imageNoteHtml() + '<div class="explain-list">' + cards + "</div>";
+    root.innerHTML =
+      toolbarHtml(route) +
+      imageNoteHtml() +
+      allPartTabsHtml(route) +
+      '<div class="explain-list">' +
+      cards +
+      "</div>";
     mountPhotos(root);
   }
 

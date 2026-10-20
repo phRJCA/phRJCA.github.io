@@ -62,7 +62,7 @@
     navApps: "Apps",
     navHome: "Home",
     navSommelier: "Sommelier Certification Level 1",
-    navQuizAll: "Quiz All",
+    navQuizAll: "All",
     navPartSelection: "(1) Wine Selection & Purchase",
     navPartCellar: "(2) Wine Cellar Management",
     navPartRecommend: "(3) Wine Recommendation & Sales",
@@ -70,6 +70,16 @@
     navPartTasting: "(5) Wine Tasting",
     navPartClassification: "(6) Wine Classification",
     navPartManagement: "(7) Wine Business Management",
+    navEnglishCat: "English Cat",
+    navCatTalk: "Talk",
+    catTitle: "English Cat · RJCA",
+    catLead: "Talk to the cat. The words you use become words it can say, and its English opens up as it levels with you.",
+    catSay: "Say",
+    catPlaceholder: "Say something in English",
+    catName: "Name",
+    catLevel: "Level",
+    catWords: "words",
+    catLearned: "Learned",
     appBadge: "Apps",
     appLead: "Practice the written exam in shuffled quiz cards, or review explanations by section.",
     appRefLabel: "Reference",
@@ -137,7 +147,7 @@
     navApps: "Apps",
     navHome: "ホーム",
     navSommelier: "ソムリエ1級",
-    navQuizAll: "全問クイズ",
+    navQuizAll: "全問",
     navPartSelection: "(1) ワイン選定・購入",
     navPartCellar: "(2) ワインセラー管理",
     navPartRecommend: "(3) ワイン推薦・販売",
@@ -145,6 +155,16 @@
     navPartTasting: "(5) ワインテイスティング",
     navPartClassification: "(6) ワイン分類",
     navPartManagement: "(7) 営業場の経営",
+    navEnglishCat: "英語の猫",
+    navCatTalk: "話す",
+    catTitle: "英語の猫 · RJCA",
+    catLead: "猫に話しかけます。使った単語を猫が話せるようになり、レベルとともに英語が広がります。",
+    catSay: "話す",
+    catPlaceholder: "英語で話しかけてください",
+    catName: "名前",
+    catLevel: "レベル",
+    catWords: "語",
+    catLearned: "覚えた語",
     appBadge: "Apps",
     appLead: "問題順をシャッフルしたクイズか、分野ごとの解説で筆記試験を復習できます。",
     appRefLabel: "参考",
@@ -212,7 +232,7 @@
     navApps: "Apps",
     navHome: "홈",
     navSommelier: "소믈리에 1급",
-    navQuizAll: "전체 퀴즈",
+    navQuizAll: "전체",
     navPartSelection: "(1) 와인선정 · 구매",
     navPartCellar: "(2) 와인셀러관리",
     navPartRecommend: "(3) 와인 추천판매",
@@ -220,6 +240,16 @@
     navPartTasting: "(5) 와인 테이스팅",
     navPartClassification: "(6) 와인 분류",
     navPartManagement: "(7) 와인 영업장 경영",
+    navEnglishCat: "영어 고양이",
+    navCatTalk: "말하기",
+    catTitle: "영어 고양이 · RJCA",
+    catLead: "고양이에게 말하세요. 당신이 쓴 단어를 고양이가 말하게 되고, 레벨과 함께 영어가 넓어집니다.",
+    catSay: "말하기",
+    catPlaceholder: "영어로 말해 보세요",
+    catName: "이름",
+    catLevel: "레벨",
+    catWords: "단어",
+    catLearned: "배운 단어",
     appBadge: "Apps",
     appLead: "문제는 섞고 보기는 그대로 둔 카드 퀴즈와, 분야별 해설로 필기시험을 복습할 수 있습니다.",
     appRefLabel: "참고",
@@ -318,9 +348,10 @@
     if (!pack) return;
 
     document.documentElement.lang = pack.htmlLang;
-    document.title = document.body.classList.contains("page-app")
-      ? pack.appTitle
-      : pack.title;
+    const titleKey = document.body.getAttribute("data-title-key");
+    if (titleKey && pack[titleKey]) document.title = pack[titleKey];
+    else if (document.body.classList.contains("page-app")) document.title = pack.appTitle;
+    else document.title = pack.title;
     document.body.classList.remove("lang-en", "lang-jp", "lang-kr");
     document.body.classList.add(pack.bodyClass);
 
@@ -369,12 +400,13 @@
     document.querySelectorAll(".apps-submenu a").forEach((a) => {
       const url = new URL(a.getAttribute("href"), window.location.origin);
       const linkPart = url.searchParams.get("part");
-      const onApp = currentPath.endsWith("/apps/sommelier-level-1");
-      if (onApp && currentPart && linkPart === currentPart) {
-        a.setAttribute("aria-current", "page");
-      } else {
-        a.removeAttribute("aria-current");
-      }
+      const linkPath = url.pathname.replace(/\/$/, "") || "/";
+      const onSommelier = currentPath.endsWith("/apps/sommelier-level-1");
+      const currentLink = linkPart
+        ? onSommelier && currentPart && linkPart === currentPart
+        : linkPath === currentPath;
+      if (currentLink) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
     });
 
     refreshPhotoBubbleIfVisible();
@@ -383,22 +415,43 @@
   function setupAppsNav() {
     const nav = document.querySelector(".apps-nav");
     const btn = document.querySelector(".apps-root");
-    const parent = document.querySelector(".apps-item-parent");
-    const toggle = document.querySelector(".apps-parent-toggle");
+    const parents = [...document.querySelectorAll(".apps-item-parent")];
     if (!nav || !btn) return;
 
     const STORE = "rjca-apps-dock";
-    const SUB = "rjca-apps-sub";
     const desktopQuery = window.matchMedia("(min-width: 900px)");
     const isDesktop = () => desktopQuery.matches;
+    const pathNow = () => window.location.pathname.replace(/\/$/, "") || "/";
 
-    const setSub = (open, remember) => {
-      if (!parent || !toggle) return;
+    const parentToggle = (parent) => parent.querySelector(".apps-parent-toggle");
+    const parentId = (parent) => {
+      const toggle = parentToggle(parent);
+      return toggle ? toggle.getAttribute("aria-controls") : "";
+    };
+    const parentHasCurrent = (parent) =>
+      [...parent.querySelectorAll(".apps-submenu a")].some((a) => {
+        const url = new URL(a.getAttribute("href"), window.location.origin);
+        return (url.pathname.replace(/\/$/, "") || "/") === pathNow();
+      });
+
+    const setSub = (parent, open, remember) => {
+      const toggle = parentToggle(parent);
+      if (!toggle) return;
       parent.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       if (remember && isDesktop()) {
-        try { localStorage.setItem(SUB, open ? "1" : "0"); } catch (err) { /* ignore */ }
+        try { localStorage.setItem("rjca-apps-sub:" + parentId(parent), open ? "1" : "0"); } catch (err) { /* ignore */ }
       }
+    };
+
+    const storedSub = (parent) => {
+      const id = parentId(parent);
+      try {
+        const v = localStorage.getItem("rjca-apps-sub:" + id);
+        if (v === "1" || v === "0") return v === "1";
+        if (id === "apps-submenu" && localStorage.getItem("rjca-apps-sub") === "1") return true;
+      } catch (err) { /* ignore */ }
+      return false;
     };
 
     const setOpen = (open, remember) => {
@@ -408,20 +461,17 @@
       if (remember && isDesktop()) {
         try { localStorage.setItem(STORE, open ? "1" : "0"); } catch (err) { /* ignore */ }
       }
-      if (!open) setSub(false, false);
+      if (!open) parents.forEach((parent) => setSub(parent, false, false));
     };
-
-    const onSommelier = () =>
-      window.location.pathname.replace(/\/$/, "").endsWith("/apps/sommelier-level-1");
 
     if (isDesktop()) {
       let docked = false;
       try { docked = localStorage.getItem(STORE) === "1"; } catch (err) { docked = false; }
       if (docked) {
         setOpen(true, false);
-        let sub = onSommelier();
-        try { if (localStorage.getItem(SUB) === "1") sub = true; } catch (err) { /* ignore */ }
-        setSub(sub, false);
+        parents.forEach((parent) => {
+          setSub(parent, storedSub(parent) || parentHasCurrent(parent), false);
+        });
       }
     }
 
@@ -429,15 +479,19 @@
       e.stopPropagation();
       const open = !nav.classList.contains("is-open");
       setOpen(open, true);
-      if (open && onSommelier()) setSub(true, true);
+      if (open) parents.forEach((parent) => {
+        if (parentHasCurrent(parent)) setSub(parent, true, true);
+      });
     });
 
-    if (toggle) {
+    parents.forEach((parent) => {
+      const toggle = parentToggle(parent);
+      if (!toggle) return;
       toggle.addEventListener("click", (e) => {
         e.stopPropagation();
-        setSub(!parent.classList.contains("is-open"), true);
+        setSub(parent, !parent.classList.contains("is-open"), true);
       });
-    }
+    });
 
     document.addEventListener("click", (e) => {
       if (isDesktop()) return;

@@ -1,0 +1,228 @@
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (min-width: 800px) {
+  .page-app #english-cat {
+    width: min(40rem, 100%);
+    margin-inline: auto;
+  }
+}
+
+.cat-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem 1.1rem 1rem;
+  border-radius: var(--radius-panel);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.cat-speech {
+  margin: 0 0 0.35rem;
+  max-width: 36rem;
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(110, 231, 197, 0.28);
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.cat-figure {
+  width: min(220px, 70%);
+}
+
+.cat-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.cat-tail {
+  fill: none;
+  stroke: #2c3344;
+  stroke-width: 14;
+  stroke-linecap: round;
+  transform-origin: 78px 158px;
+}
+
+.cat-body,
+.cat-head,
+.cat-ear,
+.cat-paw {
+  fill: #2c3344;
+}
+
+.cat-chest,
+.cat-muzzle {
+  fill: #414b63;
+}
+
+.cat-ear-in {
+  fill: rgba(110, 231, 197, 0.45);
+}
+
+.cat-eye {
+  fill: #6ee7c5;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.cat-pupil {
+  fill: #12151c;
+}
+
+.cat-nose {
+  fill: #f2b8c6;
+}
+
+.cat-mouth,
+.cat-whisker {
+  fill: none;
+  stroke: #9aa3b2;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.cat-name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cat-name input,
+.cat-form input {
+  font-family: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.cat-name input {
+  width: 9rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.cat-name input:focus,
+.cat-form input:focus {
+  outline: 2px solid rgba(110, 231, 197, 0.55);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.cat-level {
+  margin: 1.15rem 0 0.15rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.cat-band {
+  color: var(--accent);
+}
+
+.cat-exams {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.cat-xp {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.cat-xp-bar {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.cat-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-learned {
+  margin: 0.7rem 0 0;
+  color: var(--accent);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.cat-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.15rem;
+}
+
+.cat-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 0.9rem;
+  font-size: 1rem;
+}
+
+.cat-form .quiz-btn {
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cat-tail {
+    animation: cat-tail 3.4s ease-in-out infinite;
+  }
+
+  .cat-eye {
+    animation: cat-blink 5.6s infinite;
+  }
+
+  .cat-figure.is-up .cat-svg {
+    animation: cat-perk 0.55s ease;
+  }
+}
+
+@keyframes cat-tail {
+  50% { transform: rotate(10deg); }
+}
+
+@keyframes cat-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.12); }
+}
+
+@keyframes cat-perk {
+  40% { transform: translateY(-7px); }
+}

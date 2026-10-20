@@ -1,0 +1,83 @@
+---
+layout: null
+permalink: /apps/english-cat/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>English Cat · RJCA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/apps.css">
+  <link rel="stylesheet" href="/assets/css/english-cat.css">
+</head>
+<body class="page-app" data-title-key="catTitle">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    {% include site-nav.html %}
+
+    <main id="english-cat">
+      <p class="hero-badge" data-i18n="appBadge">Apps</p>
+      <h1 data-i18n="navEnglishCat">English Cat</h1>
+      <p class="lead app-lead" data-i18n="catLead">Talk to the cat. The words you use become words it can say, and its English opens up as it levels with you.</p>
+
+      <section class="cat-stage" id="cat-stage" aria-label="English Cat">
+        <p class="cat-speech" id="cat-speech" role="status" aria-live="polite">Hello.</p>
+        <div class="cat-figure" id="cat-figure">
+          <svg class="cat-svg" viewBox="0 0 240 220" aria-hidden="true">
+            <g class="cat-tail">
+              <path d="M78 158 C36 162 16 118 40 78 C50 62 70 74 60 96" />
+            </g>
+            <ellipse class="cat-body" cx="132" cy="160" rx="64" ry="42" />
+            <ellipse class="cat-chest" cx="146" cy="170" rx="30" ry="22" />
+            <polygon class="cat-ear" points="108,86 122,28 156,74" />
+            <polygon class="cat-ear" points="170,70 206,24 208,86" />
+            <polygon class="cat-ear-in" points="120,74 128,44 148,72" />
+            <polygon class="cat-ear-in" points="178,66 196,40 196,78" />
+            <circle class="cat-head" cx="156" cy="100" r="48" />
+            <ellipse class="cat-muzzle" cx="160" cy="116" rx="20" ry="14" />
+            <ellipse class="cat-eye" cx="140" cy="98" rx="8" ry="10" />
+            <ellipse class="cat-eye" cx="174" cy="96" rx="8" ry="10" />
+            <ellipse class="cat-pupil" cx="142" cy="100" rx="3.2" ry="5" />
+            <ellipse class="cat-pupil" cx="176" cy="98" rx="3.2" ry="5" />
+            <polygon class="cat-nose" points="158,110 152,118 164,118" />
+            <path class="cat-mouth" d="M158 118 C154 126 146 126 144 122 M158 118 C164 126 172 126 174 122" />
+            <path class="cat-whisker" d="M128 114 H96 M130 122 H94 M184 112 H214 M182 120 H216" />
+            <ellipse class="cat-paw" cx="108" cy="196" rx="16" ry="8" />
+            <ellipse class="cat-paw" cx="158" cy="198" rx="16" ry="8" />
+          </svg>
+        </div>
+        <label class="cat-name">
+          <span data-i18n="catName">Name</span>
+          <input id="cat-name" type="text" maxlength="24" autocomplete="off" spellcheck="false">
+        </label>
+      </section>
+
+      <p class="cat-level" id="cat-level"></p>
+      <p class="cat-exams" id="cat-exams"></p>
+      <div class="cat-xp" id="cat-xp">
+        <div class="cat-xp-bar" id="cat-xp-bar"></div>
+      </div>
+      <p class="cat-meta">
+        <span id="cat-xp-text"></span>
+        <span id="cat-word-count"></span>
+      </p>
+      <p class="cat-learned" id="cat-learned" role="status" aria-live="polite" hidden></p>
+
+      <form class="cat-form" id="cat-form">
+        <label class="visually-hidden" for="cat-input" data-i18n="catPlaceholder">Say something in English</label>
+        <input id="cat-input" type="text" maxlength="240" autocomplete="off" spellcheck="true" enterkeyhint="send">
+        <button class="quiz-btn primary" type="submit" data-i18n="catSay">Say</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/english-cat.js" defer></script>
+</body>
+</html>

@@ -48,6 +48,38 @@
   gap: 0.5rem;
 }
 
+.part-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.15rem;
+}
+
+.part-tabs a {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.part-tabs a:hover {
+  color: var(--text);
+  border-color: rgba(110, 231, 197, 0.35);
+  background: var(--accent-dim);
+}
+
+.part-tabs a[aria-current="true"] {
+  color: var(--bg-deep);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
 .mode-tabs a,
 .quiz-btn {
   font-family: inherit;
