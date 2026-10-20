@@ -136,7 +136,47 @@
     ["exact", "C2", "adj"],
     ["measured", "C2", "adj"],
     ["precise", "C2", "adj"],
-    ["certain", "C2", "adj"]
+    ["certain", "C2", "adj"],
+    ["soup", "A1", "noun", "", "order"],
+    ["rice", "A1", "noun", "", "order"],
+    ["tea", "A1", "noun", "", "order"],
+    ["menu", "A1", "noun", "menus", "order"],
+    ["plate", "A1", "noun", "plates", "order"],
+    ["bill", "A1", "noun", "bills", "order"],
+    ["order", "A1", "verb", "orders ordered ordering", "order"],
+    ["salad", "A2", "noun", "salads", "order"],
+    ["coffee", "A2", "noun", "", "order"],
+    ["chicken", "A2", "noun", "", "order"],
+    ["taste", "A2", "verb", "tastes tasted tasting", "order"],
+    ["dessert", "B1", "noun", "desserts", "order"],
+    ["run", "A1", "verb", "runs ran running", "", "fitness"],
+    ["lift", "A1", "verb", "lifts lifted lifting", "", "fitness"],
+    ["strong", "A1", "adj", "stronger", "", "fitness"],
+    ["stretch", "A2", "verb", "stretches stretched stretching", "", "fitness"],
+    ["set", "A2", "noun", "sets", "gym", "fitness"],
+    ["squat", "A2", "noun", "squats", "gym", "fitness"],
+    ["muscle", "A2", "noun", "muscles", "gym", "fitness"],
+    ["coach", "B1", "noun", "coaches", "gym", "fitness"],
+    ["treadmill", "B1", "noun", "treadmills", "gym", "fitness"],
+    ["book", "A1", "noun", "books", "", "study"],
+    ["read", "A2", "verb", "reads reading", "", "study"],
+    ["learn", "A2", "verb", "learns learned learnt learning", "", "study"],
+    ["page", "A2", "noun", "pages", "", "study"],
+    ["code", "A2", "noun", "codes", "course:code"],
+    ["function", "A2", "noun", "functions", "course:code"],
+    ["variable", "A2", "noun", "variables", "course:code"],
+    ["bug", "A2", "noun", "bugs", "course:code"],
+    ["server", "B1", "noun", "servers", "course:code"],
+    ["chart", "A2", "noun", "charts", "course:data"],
+    ["number", "A2", "noun", "numbers", "course:data"],
+    ["pattern", "A2", "noun", "patterns", "course:data"],
+    ["model", "B1", "noun", "models", "course:data"],
+    ["row", "A2", "noun", "rows", "course:data"],
+    ["cable", "A2", "noun", "cables", "course:net"],
+    ["signal", "A2", "noun", "signals", "course:net"],
+    ["route", "A2", "noun", "routes", "course:net"],
+    ["packet", "B1", "noun", "packets", "course:net"],
+    ["node", "B1", "noun", "nodes", "course:net"]
   ];
 
   const FRAMES = {
@@ -176,16 +216,32 @@
   BANDS.forEach((band) => { BAND_MIN[band.id] = band.min; });
 
   const WORDS = [];
+  const BY_ID = {};
   const ALIAS = {};
+  const SKILL_NEED = 3;
+  let catX = 28;
+  let catLift = 16;
+  let catDepth = 0.7;
   RAW.forEach((row) => {
-    const word = { id: row[0], band: row[1], pos: row[2], minLevel: BAND_MIN[row[1]] };
+    const word = {
+      id: row[0],
+      band: row[1],
+      pos: row[2],
+      minLevel: BAND_MIN[row[1]],
+      place: row[4] || "",
+      skill: row[5] || ""
+    };
     WORDS.push(word);
+    BY_ID[word.id] = word;
     ALIAS[row[0]] = row[0];
     if (row[3]) row[3].split(" ").forEach((form) => { ALIAS[form] = row[0]; });
   });
 
   const speechEl = document.getElementById("cat-speech");
-  const figureEl = document.getElementById("cat-figure");
+  const houseCat = document.getElementById("house-cat");
+  const houseBody = document.getElementById("house-body");
+  const catFlip = document.getElementById("cat-flip");
+  const sceneEl = document.getElementById("house-scene");
   const nameEl = document.getElementById("cat-name");
   const levelEl = document.getElementById("cat-level");
   const examsEl = document.getElementById("cat-exams");
@@ -196,11 +252,17 @@
   const formEl = document.getElementById("cat-form");
   const inputEl = document.getElementById("cat-input");
   const xpMeter = document.getElementById("cat-xp");
+  const fitnessBar = document.getElementById("fitness-bar");
+  const studyBar = document.getElementById("study-bar");
+  const fitnessText = document.getElementById("fitness-text");
+  const studyText = document.getElementById("study-text");
+  const coursesEl = document.getElementById("cat-courses");
 
   if (!speechEl || !formEl || !inputEl) return;
 
   let state = load();
   let lastLearned = [];
+  let lastNote = "";
 
   function t(key) {
     return window.RJCA_I18N ? window.RJCA_I18N.t(key) : key;
@@ -242,6 +304,42 @@
     return WORDS.filter((word) => state.heard[word.id] && level >= word.minLevel);
   }
 
+  function isStarter(word) {
+    return word.skill && word.place !== "gym" && word.place.indexOf("course:") !== 0;
+  }
+
+  function starterCount(skill) {
+    return WORDS.filter((word) => word.skill === skill && isStarter(word) && state.heard[word.id]).length;
+  }
+
+  function gymOpen() {
+    return starterCount("fitness") >= SKILL_NEED;
+  }
+
+  function uniOpen() {
+    return starterCount("study") >= SKILL_NEED;
+  }
+
+  function canLearn(word) {
+    if (word.place === "gym") return gymOpen();
+    if (word.place.indexOf("course:") === 0) return uniOpen() && state.course === word.place.slice(7);
+    return true;
+  }
+
+  function roomOpen(room) {
+    if (room === "gym") return gymOpen();
+    if (room === "study") return uniOpen();
+    return true;
+  }
+
+  function sceneKey() {
+    if (state.room === "kitchen") return "catSceneKitchen";
+    if (state.room === "gym") return "catSceneGym";
+    if (state.room === "study") return state.course ? "catSceneStudy" : "catSceneChoose";
+    const band = bandFor(progress(state.totalXp).level).id;
+    return "catScene" + band;
+  }
+
   function speak(known, prefer) {
     if (!known.length) return "Hello.";
     const order = BANDS.map((band) => band.id);
@@ -276,10 +374,12 @@
         totalXp: Number(raw.totalXp) || 0,
         heard: raw.heard && typeof raw.heard === "object" ? raw.heard : {},
         name: typeof raw.name === "string" ? raw.name.slice(0, 24) : "",
-        lastText: typeof raw.lastText === "string" ? raw.lastText : ""
+        lastText: typeof raw.lastText === "string" ? raw.lastText : "",
+        room: raw.room === "living" || raw.room === "gym" || raw.room === "study" || raw.room === "kitchen" ? raw.room : "kitchen",
+        course: raw.course === "code" || raw.course === "data" || raw.course === "net" ? raw.course : ""
       };
     } catch (err) {
-      return { totalXp: 0, heard: {}, name: "", lastText: "" };
+      return { totalXp: 0, heard: {}, name: "", lastText: "", room: "kitchen", course: "" };
     }
   }
 
@@ -306,21 +406,82 @@
     xpMeter.setAttribute("aria-valuenow", String(now.into));
     xpTextEl.textContent = now.into + " / " + now.need;
     countEl.textContent = known.length + " " + t("catWords");
-    if (lastLearned.length) {
-      learnedEl.hidden = false;
-      learnedEl.textContent = t("catLearned") + ": " + lastLearned.join(", ");
-    } else {
-      learnedEl.hidden = true;
-      learnedEl.textContent = "";
-    }
+    const learnedBits = [];
+    if (lastNote) learnedBits.push(lastNote);
+    if (lastLearned.length) learnedBits.push(t("catLearned") + ": " + lastLearned.join(", "));
+    learnedEl.hidden = learnedBits.length === 0;
+    learnedEl.textContent = learnedBits.join(" ");
     inputEl.placeholder = t("catPlaceholder");
     nameEl.value = state.name;
+
+    const fit = Math.min(SKILL_NEED, starterCount("fitness"));
+    const study = Math.min(SKILL_NEED, starterCount("study"));
+    fitnessBar.style.width = (fit / SKILL_NEED) * 100 + "%";
+    studyBar.style.width = (study / SKILL_NEED) * 100 + "%";
+    fitnessText.textContent = gymOpen() ? t("catOpen") : fit + "/" + SKILL_NEED;
+    studyText.textContent = uniOpen() ? t("catOpen") : study + "/" + SKILL_NEED;
+
+    const gymProp = document.getElementById("prop-gym");
+    const studyProp = document.getElementById("prop-study");
+    if (gymProp) gymProp.hidden = !gymOpen();
+    if (studyProp) studyProp.hidden = !uniOpen();
+    coursesEl.hidden = !uniOpen();
+    coursesEl.querySelectorAll("[data-course]").forEach((btn) => {
+      const on = btn.getAttribute("data-course") === state.course;
+      btn.classList.toggle("primary", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (sceneEl) sceneEl.textContent = t(sceneKey());
+  }
+
+  function spots() {
+    const list = [
+      { id: "kitchen", x: 14, depth: 0.9, lift: 8 },
+      { id: "living", x: 28, depth: 0.7, lift: 16 },
+      { id: "living", x: 36, depth: 0.55, lift: 34 },
+      { id: "living", x: 40, depth: 0.4, lift: 52 },
+      { id: "living", x: 58, depth: 0.32, lift: 42 },
+      { id: "living", x: 66, depth: 0.24, lift: 56 }
+    ];
+    if (gymOpen()) list.push({ id: "gym", x: 84, depth: 0.72, lift: 14 });
+    if (uniOpen()) list.push({ id: "study", x: 68, depth: 0.3, lift: 50 });
+    return list;
+  }
+
+  function placeCat(next) {
+    const dx = Math.abs(next.x - catX);
+    const dy = Math.abs(next.lift - catLift);
+    catFlip.classList.toggle("face-left", next.x < catX);
+    houseCat.classList.toggle("is-climb", dy > 10 && dy > dx * 0.45);
+    houseCat.classList.add("is-walking");
+    const scale = 0.26 + next.depth * 1.64;
+    houseCat.style.left = next.x + "%";
+    houseCat.style.bottom = next.lift + "%";
+    houseCat.style.transform = "scale(" + scale.toFixed(3) + ")";
+    houseCat.style.zIndex = String(3 + Math.round(next.depth * 5));
+    catX = next.x;
+    catLift = next.lift;
+    catDepth = next.depth;
+    state.room = next.id;
+    if (sceneEl) sceneEl.textContent = t(sceneKey());
+  }
+
+  function wander() {
+    const list = spots();
+    placeCat(list[Math.floor(Math.random() * list.length)]);
+  }
+
+  function roomAt(x, lift) {
+    if (lift < 22 && x < 24) return "kitchen";
+    if (gymOpen() && lift < 28 && x > 72) return "gym";
+    if (uniOpen() && lift > 40 && x > 55) return "study";
+    return "living";
   }
 
   function perk() {
-    figureEl.classList.remove("is-up");
-    void figureEl.offsetWidth;
-    figureEl.classList.add("is-up");
+    catFlip.classList.remove("is-up");
+    void catFlip.offsetWidth;
+    catFlip.classList.add("is-up");
   }
 
   formEl.addEventListener("submit", (e) => {
@@ -330,6 +491,8 @@
     if (!line) return;
 
     const beforeLevel = progress(state.totalXp).level;
+    const gymBefore = gymOpen();
+    const uniBefore = uniOpen();
     const beforeKnown = {};
     knownWords().forEach((word) => { beforeKnown[word.id] = true; });
 
@@ -338,12 +501,20 @@
       const paid = {};
       let freshCount = 0;
       let repeatCount = 0;
+      const ids = [];
       tokens(text).forEach((token) => {
         const id = ALIAS[token];
-        if (!id || paid[id]) return;
-        const word = WORDS.find((item) => item.id === id);
-        if (!word) return;
+        if (!id || paid[id] || !BY_ID[id]) return;
         paid[id] = true;
+        ids.push(id);
+      });
+      ids.sort((a, b) => {
+        const aLate = BY_ID[a].place === "gym" || BY_ID[a].place.indexOf("course:") === 0;
+        const bLate = BY_ID[b].place === "gym" || BY_ID[b].place.indexOf("course:") === 0;
+        return (aLate ? 1 : 0) - (bLate ? 1 : 0);
+      });
+      ids.forEach((id) => {
+        const word = BY_ID[id];
         if (state.heard[id]) {
           if (repeatCount < REPEAT_CAP) {
             gained += 1;
@@ -351,7 +522,7 @@
           }
           return;
         }
-        if (freshCount >= NEW_CAP) return;
+        if (!canLearn(word) || freshCount >= NEW_CAP) return;
         state.heard[id] = true;
         gained += XP[word.band];
         freshCount += 1;
@@ -361,10 +532,14 @@
     state.totalXp += gained;
     state.lastText = line;
     const learned = knownWords().filter((word) => !beforeKnown[word.id]);
+    const notices = [];
+    if (!gymBefore && gymOpen()) notices.push(t("catGymOpened"));
+    if (!uniBefore && uniOpen()) notices.push(t("catUniOpened"));
+    lastNote = notices.join(" ");
     lastLearned = learned.map((word) => word.id);
     const prefer = learned.slice().sort((a, b) => b.minLevel - a.minLevel)[0] || null;
     speechEl.textContent = speak(knownWords(), prefer);
-    if (progress(state.totalXp).level > beforeLevel || learned.length) perk();
+    if (progress(state.totalXp).level > beforeLevel || learned.length || notices.length) perk();
     save();
     renderStats();
     inputEl.value = "";
@@ -376,8 +551,58 @@
     save();
   });
 
+  coursesEl.querySelectorAll("[data-course]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.course = btn.getAttribute("data-course");
+      save();
+      renderStats();
+    });
+  });
+
+  houseCat.addEventListener("transitionend", (e) => {
+    if (e.propertyName === "left" || e.propertyName === "bottom" || e.propertyName === "transform") {
+      houseCat.classList.remove("is-walking");
+    }
+  });
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let wanderTimer = 0;
+  let wanderInterval = 0;
+
+  function scheduleWander(delay) {
+    window.clearTimeout(wanderTimer);
+    window.clearInterval(wanderInterval);
+    wanderInterval = 0;
+    if (reduceMotion) return;
+    wanderTimer = window.setTimeout(() => {
+      wander();
+      wanderInterval = window.setInterval(wander, 4800);
+    }, delay);
+  }
+
+  houseBody.addEventListener("click", (e) => {
+    const rect = houseBody.getBoundingClientRect();
+    const x = Math.max(10, Math.min(90, ((e.clientX - rect.left) / rect.width) * 100));
+    const lift = Math.max(6, Math.min(62, ((rect.bottom - e.clientY) / rect.height) * 100));
+    const climb = Math.max(0, Math.min(1, (lift - 6) / 56));
+    placeCat({
+      id: roomAt(x, lift),
+      x: x,
+      lift: lift,
+      depth: 0.9 - climb * 0.66
+    });
+    scheduleWander(4800);
+  });
+
   window.addEventListener("rjca:langchange", renderStats);
 
+  if (!roomOpen(state.room)) state.room = "living";
+  houseCat.classList.add("no-move");
+  houseCat.style.left = catX + "%";
+  houseCat.style.bottom = "16%";
+  houseCat.style.transform = "scale(" + (0.26 + catDepth * 1.64).toFixed(3) + ")";
   speechEl.textContent = speak(knownWords(), null);
   renderStats();
+  window.requestAnimationFrame(() => houseCat.classList.remove("no-move"));
+  scheduleWander(1400);
 })();
