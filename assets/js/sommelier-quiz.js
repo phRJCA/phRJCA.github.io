@@ -125,6 +125,12 @@
     return PART_IDS.indexOf(id) + 1;
   }
 
+  function countBracket(n) {
+    if (lang() === "kr") return "[" + n + "문]";
+    if (lang() === "jp") return "[" + n + "問]";
+    return "[" + n + "]";
+  }
+
   function questionsFor(part) {
     const all = window.SOMMELIER_BANK.questions;
     if (part === "all") return all.slice();
@@ -187,11 +193,17 @@
       return;
     }
     if (route.part === "all") {
-      title.textContent = t("allQuiz");
+      title.textContent = t("allQuiz") + " " + countBracket(questionsFor("all").length);
       lead.textContent = route.mode === "explain" ? t("allLeadExplain") : t("allLead");
       return;
     }
-    title.textContent = "(" + partIndex(route.part) + ") " + partLabel(route.part);
+    title.textContent =
+      "(" +
+      partIndex(route.part) +
+      ") " +
+      partLabel(route.part) +
+      " " +
+      countBracket(questionsFor(route.part).length);
     lead.textContent = route.mode === "explain" ? t("partLeadExplain") : t("partLeadQuiz");
   }
 
@@ -238,6 +250,7 @@
   function allPartTabsHtml(route) {
     if (route.part !== "all" || route.mode !== "explain") return "";
     const tabs = PART_IDS.map(function (id, i) {
+      const count = questionsFor(id).length;
       return (
         '<a href="' +
         appHref({ part: "all", mode: "explain", section: id }) +
@@ -248,6 +261,8 @@
         (i + 1) +
         ") " +
         escapeHtml(partLabel(id)) +
+        " " +
+        escapeHtml(countBracket(count)) +
         "</a>"
       );
     }).join("");
