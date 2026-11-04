@@ -21,6 +21,8 @@
           </ul>
         </div>
       </li>
+      {% comment %} Hidden on prod for now; page still lives at /apps/english-cat/. {% endcomment %}
+      {% unless jekyll.environment == "production" %}
       <li class="apps-item-parent">
         <button type="button" class="apps-parent-toggle" aria-expanded="false" aria-controls="apps-submenu-cat" data-i18n="navEnglishCat">English Cat</button>
         <div class="apps-submenu-clip">
@@ -29,6 +31,7 @@
           </ul>
         </div>
       </li>
+      {% endunless %}
     </ul>
   </nav>
   <nav class="lang-switch" aria-label="Language">
